@@ -54,55 +54,55 @@ Implementation
 
 {$R *.dfm} //template tweaked by : Araachmadi Putra Pambudi
 
-Function fDupCek(sDari, sKe: String): Boolean;
+Function fa(fpa, fpb: String): Boolean;
 Var
-  i, j: integer;
+  a: integer;
 Begin
   With futama Do
-    For i := 0 To lvdaftar.Items.Count - 1 Do
-      If AnsiLowerCase(lvdaftar.Items.Item[i].Caption) = AnsiLowerCase(sDari) Then
-        Result := AnsiLowerCase(lvdaftar.Items.Item[i].SubItems.Strings[1]) = AnsiLowerCase(sKe);
+    For a := 0 To lvdaftar.Items.Count - 1 Do
+      If AnsiLowerCase(lvdaftar.Items.Item[a].Caption) = AnsiLowerCase(fpa) Then
+        Result := AnsiLowerCase(lvdaftar.Items.Item[a].SubItems.Strings[1]) = AnsiLowerCase(fpb);
 End;
 
-Procedure pSimpanIni;
+Procedure pa;
 Var
-  tif: TIniFile;
-  i: integer;
+  a: TIniFile;
+  b: integer;
 Begin
   With futama Do
   Begin
-    tif := TIniFile.Create(ChangeFileExt(Application.ExeName, '.ini'));
-    tif.EraseSection('data');
-    tif.WriteInteger('data', 'jumlah', lvdaftar.Items.Count);
-    For i := 0 To lvdaftar.Items.Count - 1 Do
+    a := TIniFile.Create(ChangeFileExt(Application.ExeName, '.ini'));
+    a.EraseSection('data');
+    a.WriteInteger('data', 'jumlah', lvdaftar.Items.Count);
+    For b := 0 To lvdaftar.Items.Count - 1 Do
     Begin
-      tif.WriteString('data', 'dari-' + inttostr(i), lvdaftar.Items.Item[i].Caption);
-      tif.WriteString('data', 'ke-' + inttostr(i), lvdaftar.Items.Item[i].SubItems.Strings[1]);
-      tif.WriteString('data', 'val-' + inttostr(i), lvdaftar.Items.Item[i].SubItems.Strings[0]);
+      a.WriteString('data', 'dari-' + inttostr(b), lvdaftar.Items.Item[b].Caption);
+      a.WriteString('data', 'ke-' + inttostr(b), lvdaftar.Items.Item[b].SubItems.Strings[1]);
+      a.WriteString('data', 'val-' + inttostr(b), lvdaftar.Items.Item[b].SubItems.Strings[0]);
     End;
-    tif.Free;
+    a.Free;
   End;
 End;
 
-Function fKonversi(sDari, sKe: String; rval: double): String;
+Function fb(fpa, fpb: String; fpc: double): String;
 Var
-  i: integer;
-  r: double;
+  a: integer;
+  b: double;
 Begin
   With futama Do
   Begin
-    For i := 0 To lvdaftar.Items.Count - 1 Do
-      If AnsiLowerCase(lvdaftar.Items.Item[i].Caption) = AnsiLowerCase(sDari) Then
-        If AnsiLowerCase(lvdaftar.Items.Item[i].SubItems.Strings[1]) = AnsiLowerCase(sKe) Then
-          r := StrToFloat(lvdaftar.Items.Item[i].SubItems.Strings[0]);
-    Result := floattostr(rval * r);
+    For a := 0 To lvdaftar.Items.Count - 1 Do
+      If AnsiLowerCase(lvdaftar.Items.Item[a].Caption) = AnsiLowerCase(fpa) Then
+        If AnsiLowerCase(lvdaftar.Items.Item[a].SubItems.Strings[1]) = AnsiLowerCase(fpb) Then
+          b := StrToFloat(lvdaftar.Items.Item[a].SubItems.Strings[0]);
+    Result := floattostr(fpc * b);
   End;
 End;
 
-Function fKoma: pchar;
+Function fc: pchar;
 Begin
-  result := StrAlloc(10);
-  GetLocaleInfo(LOCALE_SYSTEM_DEFAULT, LOCALE_SDECIMAL, result, 10);
+  Result := StrAlloc(10);
+  GetLocaleInfo(LOCALE_SYSTEM_DEFAULT, LOCALE_SDECIMAL, Result, 10);
 End;
 
 Procedure Tfutama.wmNCLButtonDown(Var Msg: TWMNCLButtonDown);
@@ -128,26 +128,26 @@ End;
 
 Procedure Tfutama.bbdsimpanClick(Sender: TObject);
 Var
-  tli: TListItem;
-  i: integer;
+  a: TListItem;
+  b: integer;
 Begin
-  If fDupCek(endari.Text, enke.Text) Then
+  If fa(endari.Text, enke.Text) Then
   Begin
     ShowMessage('Mohon masukkan data yang berbeda, data yang anda masukkan sudah ada.');
     Exit;
   End;
-  tli := lvdaftar.Items.Add;
-  tli.Caption := endari.Text;
-  tli.SubItems.Add(evke.Text);
-  tli.SubItems.Add(enke.Text);
-  pSimpanIni;
+  a := lvdaftar.Items.Add;
+  a.Caption := endari.Text;
+  a.SubItems.Add(evke.Text);
+  a.SubItems.Add(enke.Text);
+  pa;
   cbdari.Items.Clear;
-  For i := 0 To lvdaftar.Items.Count - 1 Do
-    cbdari.Items.Add(lvdaftar.Items.Item[i].Caption);
+  For b := 0 To lvdaftar.Items.Count - 1 Do
+    cbdari.Items.Add(lvdaftar.Items.Item[b].Caption);
   cbdari.ItemIndex := 0;
-  For i := 0 To lvdaftar.Items.Count - 1 Do
-    If cbdari.Items.Strings[0] = lvdaftar.Items.Item[i].Caption Then
-      cbke.Items.Add(lvdaftar.Items.Item[i].SubItems.Strings[1]);
+  For b := 0 To lvdaftar.Items.Count - 1 Do
+    If cbdari.Items.Strings[0] = lvdaftar.Items.Item[b].Caption Then
+      cbke.Items.Add(lvdaftar.Items.Item[b].SubItems.Strings[1]);
   endari.Clear;
   evke.Text := '0';
   enke.Clear;
@@ -161,7 +161,7 @@ End;
 
 Procedure Tfutama.bbdhapusClick(Sender: TObject);
 Var
-  i: integer;
+  a: integer;
 Begin
   If (lvdaftar.SelCount = 0) Or (lvdaftar.Items.Count = 1) Then
     Exit;
@@ -173,46 +173,46 @@ Begin
   Begin
     lvdaftar.DeleteSelected;
     cbdari.Items.Clear;
-    For i := 0 To lvdaftar.Items.Count - 1 Do
-      cbdari.Items.Add(lvdaftar.Items.Item[i].Caption);
+    For a := 0 To lvdaftar.Items.Count - 1 Do
+      cbdari.Items.Add(lvdaftar.Items.Item[a].Caption);
     cbdari.ItemIndex := 0;
     cbke.Items.Clear;
-    For i := 0 To lvdaftar.Items.Count - 1 Do
-      If cbdari.Items.Strings[0] = lvdaftar.Items.Item[i].Caption Then
-        cbke.Items.Add(lvdaftar.Items.Item[i].SubItems.Strings[1]);
+    For a := 0 To lvdaftar.Items.Count - 1 Do
+      If cbdari.Items.Strings[0] = lvdaftar.Items.Item[a].Caption Then
+        cbke.Items.Add(lvdaftar.Items.Item[a].SubItems.Strings[1]);
     cbke.ItemIndex := 0;
   End;
 End;
 
 Procedure Tfutama.FormCreate(Sender: TObject);
 Var
-  i, j: integer;
-  tif: TIniFile;
-  tli: TListItem;
+  a, b: integer;
+  c: TIniFile;
+  d: TListItem;
 Begin
   If Not FileExists(ChangeFileExt(Application.ExeName, '.ini')) Then
     Exit;
   cbdari.Items.Delete(0);
   cbke.Items.Delete(0);
   lvdaftar.Clear;
-  tif := TIniFile.Create(ChangeFileExt(Application.ExeName, '.ini'));
-  i := tif.ReadInteger('data', 'jumlah', 0);
-  For j := 0 To i - 1 Do
+  c := TIniFile.Create(ChangeFileExt(Application.ExeName, '.ini'));
+  a := c.ReadInteger('data', 'jumlah', 0);
+  For b := 0 To a - 1 Do
   Begin
-    tli := lvdaftar.Items.Add;
-    tli.Caption := tif.ReadString('data', 'dari-' + inttostr(j), '');
-    tli.SubItems.Add(tif.ReadString('data', 'val-' + inttostr(j), ''));
-    tli.SubItems.Add(tif.ReadString('data', 'ke-' + inttostr(j), ''));
+    d := lvdaftar.Items.Add;
+    d.Caption := c.ReadString('data', 'dari-' + inttostr(b), '');
+    d.SubItems.Add(c.ReadString('data', 'val-' + inttostr(b), ''));
+    d.SubItems.Add(c.ReadString('data', 'ke-' + inttostr(b), ''));
   End;
-  For i := 0 To lvdaftar.Items.Count - 1 Do
+  For a := 0 To lvdaftar.Items.Count - 1 Do
   Begin
-    cbdari.Items.Add(lvdaftar.Items.Item[i].Caption);
-    If lvdaftar.Items.Item[i].Caption = lvdaftar.Items.Item[0].Caption Then
-      cbke.Items.Add(lvdaftar.Items.Item[i].SubItems.Strings[1])
+    cbdari.Items.Add(lvdaftar.Items.Item[a].Caption);
+    If lvdaftar.Items.Item[a].Caption = lvdaftar.Items.Item[0].Caption Then
+      cbke.Items.Add(lvdaftar.Items.Item[a].SubItems.Strings[1])
   End;
   cbdari.ItemIndex := 0;
   cbke.ItemIndex := 0;
-  tif.Free;
+  c.Free;
 End;
 
 Procedure Tfutama.edariChange(Sender: TObject);
@@ -229,39 +229,39 @@ End;
 
 Procedure Tfutama.bbprosesClick(Sender: TObject);
 Begin
-  eke.Text := fKonversi(cbdari.Items.Strings[cbdari.itemindex], cbke.Items.Strings[cbke.itemindex], StrToFloat(edari.Text));
+  eke.Text := fb(cbdari.Items.Strings[cbdari.itemindex], cbke.Items.Strings[cbke.itemindex], StrToFloat(edari.Text));
 End;
 
 Procedure Tfutama.edariKeyPress(Sender: TObject; Var Key: Char);
 Var
-  c: char;
+  a: char;
 Begin
-  c := #0;
-  If (Key = fKoma^) And (Pos(fKoma^, edari.Text) = 0) Then
-    c := fKoma^;
-  If Not (Key In ['0'..'9', #8, c]) Then
+  a := #0;
+  If (Key = fc^) And (Pos(fc^, edari.Text) = 0) Then
+    a := fc^;
+  If Not (Key In ['0'..'9', #8, a]) Then
     Key := #0;
 End;
 
 Procedure Tfutama.evkeKeyPress(Sender: TObject; Var Key: Char);
 Var
-  c: char;
+  a: char;
 Begin
-  c := #0;
-  If (Key = fKoma^) And (Pos(fKoma^, edari.Text) = 0) Then
-    c := fKoma^;
-  If Not (Key In ['0'..'9', #8]) Then
+  a := #0;
+  If (Key = fc^) And (Pos(fc^, edari.Text) = 0) Then
+    a := fc^;
+  If Not (Key In ['0'..'9', #8, a]) Then
     Key := #0;
 End;
 
 Procedure Tfutama.cbdariChange(Sender: TObject);
 Var
-  i: integer;
+  a: integer;
 Begin
   cbke.Items.Clear;
-  For i := 0 To lvdaftar.Items.Count - 1 Do
-    If lvdaftar.Items.Item[i].Caption = cbdari.Items.Strings[cbdari.ItemIndex] Then
-      cbke.Items.Add(lvdaftar.Items.Item[i].SubItems.Strings[1]);
+  For a := 0 To lvdaftar.Items.Count - 1 Do
+    If lvdaftar.Items.Item[a].Caption = cbdari.Items.Strings[cbdari.ItemIndex] Then
+      cbke.Items.Add(lvdaftar.Items.Item[a].SubItems.Strings[1]);
   cbke.ItemIndex := 0;
   bbbersih.Click;
 End;
